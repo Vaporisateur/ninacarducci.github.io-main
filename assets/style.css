@@ -1,3 +1,4 @@
+
 body {
 	max-width: 1920px;
 	margin: auto;
@@ -6,6 +7,12 @@ body {
 	font-family: 'Inter';
 	font-style: normal;
 }
+
+img {
+	max-width: 100%;
+	height: auto;
+}
+
 .top-header {
 	background-color: white;
 	position: sticky;
