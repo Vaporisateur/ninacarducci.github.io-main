@@ -196,27 +196,47 @@
       $(".lightboxImage").attr("src", $(next).attr("src"));
     },
     createLightBox(gallery, lightboxId, navigation) {
-      gallery.append(`<div class="modal fade" id="${
+      const lightboxHTML = `<div class="modal fade" id="${
         lightboxId ? lightboxId : "galleryLightbox"
-      }" tabindex="-1" role="dialog" aria-hidden="true">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                        <div class="modal-body">
-                            ${
-                              navigation
-                                ? '<div class="mg-prev" style="cursor:pointer;position:absolute;top:50%;left:-15px;background:white;"><</div>'
-                                : '<span style="display:none;" />'
-                            }
-                            <img class="lightboxImage img-fluid" alt="Contenu de l'image affichée dans la modale au clique"/>
-                            ${
-                              navigation
-                                ? '<div class="mg-next" style="cursor:pointer;position:absolute;top:50%;right:-15px;background:white;}">></div>'
-                                : '<span style="display:none;" />'
-                            }
+      }" tabindex="-1" role="dialog">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-body">
+                                ${
+                                  navigation
+                                    ? '<div class="mg-prev" style="cursor:pointer;position:absolute;top:50%;left:-15px;background:white;"><</div>'
+                                    : '<span style="display:none;" />'
+                                }
+                                <img class="lightboxImage img-fluid" alt="Contenu de l'image affichée dans la modale au clique"/>
+                                ${
+                                  navigation
+                                    ? '<div class="mg-next" style="cursor:pointer;position:absolute;top:50%;right:-15px;background:white;}">></div>'
+                                    : '<span style="display:none;" />'
+                                }
+                            </div>
                         </div>
                     </div>
-                </div>
-            </div>`);
+                </div>`;
+      gallery.append(lightboxHTML);
+    
+      const lightbox = $(`#${lightboxId ? lightboxId : "galleryLightbox"}`);
+    
+      // Ajouter ou retirer l'attribut inert dynamiquement
+      lightbox.on("show.bs.modal", function () {
+        lightbox.removeAttr("inert");
+        // Déplacer le focus sur la modale
+        lightbox.attr("tabindex", "-1").focus();
+      });
+    
+      lightbox.on("hidden.bs.modal", function () {
+        lightbox.attr("inert", "true");
+        lightbox.removeAttr("aria-hidden");
+        // Renvoyer le focus à l'élément déclencheur
+        const triggerElement = $(`[data-target="#${lightboxId}"]`);
+        if (triggerElement.length) {
+          triggerElement.focus();
+        }
+      });
     },
     showItemTags(gallery, position, tags) {
       var tagItems =
